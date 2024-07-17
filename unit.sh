@@ -15,14 +15,14 @@ if ! command -v npm &> /dev/null; then
 fi
 
 echo -e "${BOLD_BLUE}Creating project directory and navigating into it...${NC}"
-mkdir -p SonicBatchTx
-cd SonicBatchTx
+mkdir -p UnitBatchTx
+cd UnitBatchTx
 
 echo -e "${BOLD_BLUE}Initializing a new Node.js project...${NC}"
 npm init -y > /dev/null
 
 echo -e "${BOLD_BLUE}Installing required packages...${NC}"
-npm install web3 chalk
+npm install web3 chalk readline-sync
 
 echo -e "${BOLD_BLUE}Prompting for private key and receiver address...${NC}"
 read -sp "Enter your Ethereum private key: " privkey
@@ -30,7 +30,7 @@ echo
 read -p "Enter the receiver's Ethereum address: " receiver
 
 echo -e "${BOLD_BLUE}Creating the Node.js script file...${NC}"
-cat << EOF > sonic.mjs
+cat << EOF > unit.mjs
 import Web3 from 'web3';
 import chalk from 'chalk';
 import readlineSync from 'readline-sync';
@@ -72,4 +72,4 @@ const sendEther = async (fromAddress, toAddress, amountInEther, privateKey) => {
 EOF
 
 echo -e "${BOLD_BLUE}Executing the Node.js script...${NC}"
-node sonic.mjs
+node unit.mjs
