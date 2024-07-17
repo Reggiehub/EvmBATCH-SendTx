@@ -24,11 +24,6 @@ npm init -y > /dev/null
 echo -e "${BOLD_BLUE}Installing required packages...${NC}"
 npm install web3 chalk readline-sync
 
-echo -e "${BOLD_BLUE}Prompting for private key and receiver address...${NC}"
-read -sp "Enter your Ethereum private key: " privkey
-echo
-read -p "Enter the receiver's Ethereum address: " receiver
-
 echo -e "${BOLD_BLUE}Creating the Node.js script file...${NC}"
 cat << EOF > unit.mjs
 import Web3 from 'web3';
@@ -38,9 +33,13 @@ import readlineSync from 'readline-sync';
 const rpcUrl = 'https://rpc-testnet.unit0.dev';
 const web3 = new Web3(new Web3.providers.HttpProvider(rpcUrl));
 
-const senderPrivateKey = '$privkey';
+// Prompting for private key and receiver address using readline-sync
+const senderPrivateKey = readlineSync.question('Enter your Ethereum private key: ', { hideEchoBack: true });
+console.log('\\n'); // Newline for better readability after input
+const receiverAddress = readlineSync.question('Enter the receiver\'s Ethereum address: ');
+console.log('\\n'); // Newline for better readability after input
+
 const senderAddress = web3.eth.accounts.privateKeyToAccount(senderPrivateKey).address;
-const receiverAddress = '$receiver';
 
 const sendEther = async (fromAddress, toAddress, amountInEther, privateKey) => {
   const txCount = await web3.eth.getTransactionCount(fromAddress);
@@ -71,5 +70,4 @@ const sendEther = async (fromAddress, toAddress, amountInEther, privateKey) => {
 })();
 EOF
 
-echo -e "${BOLD_BLUE}Executing the Node.js script...${NC}"
-node unit.mjs
+echo -e "${BOLD_BLUE}Ready to execute the Node.js script. Please run 'node unit.mjs' to start.${NC}"
